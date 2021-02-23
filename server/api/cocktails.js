@@ -22,13 +22,13 @@ router.get('/', async (req, res, next) => {
       ${likes && dislikes ? ' and ' : ''}
       ${dislikesWhere}`
         : '';
-    const query = `select cocktails.name from cocktails${where}`;
-    console.log(query);
+    const query = `select cocktails.id, cocktails.name from cocktails${where}`;
     const cocktails = await db.query(query, {
       plain: false,
       raw: false,
       type: QueryTypes.SELECT,
     });
+    console.log(cocktails.map((cocktail) => cocktail.id));
     res.json(cocktails);
   } catch (err) {
     next(err);
