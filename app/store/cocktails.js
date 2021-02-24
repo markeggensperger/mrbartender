@@ -1,9 +1,7 @@
 import axios from 'axios';
+import store from './index';
 
 const SET_COCKTAILS = 'SET_COCKTAILS';
-const LIKE_TAG = 'LIKE_TAG';
-const DISLIKE_TAG = 'DISLIKE_TAG';
-const IGNORE_TAG = 'IGNORE_TAG';
 
 const setCocktails = (cocktails) => ({
   type: SET_COCKTAILS,
@@ -13,8 +11,21 @@ const setCocktails = (cocktails) => ({
 export const getCocktails = () => {
   return async (dispatch) => {
     try {
-      const { data } = axios.get('/api/cocktails/');
-      dispatch(setTags(data));
+      const { data } = await axios.get('/api/cocktails/');
+      dispatch(setCocktails(data));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+};
+export const updateCocktails = () => {
+  return async (dispatch) => {
+    try {
+      const { selections } = store.getState();
+      const likes = selections.likes.map((tag) => tag.id);
+      const dislikes = selections.dislikes.map((tag) => tag.id);
+      const { data } = await axios.post('/api/cocktails/', { likes, dislikes });
+      dispatch(setCocktails(data));
     } catch (err) {
       console.error(err);
     }
@@ -25,16 +36,6 @@ export default (state = [], action) => {
   switch (action.type) {
     case SET_COCKTAILS:
       return action.cocktails;
-    case LIKE_TAG:
-      return state.filter((cocktail) =>
-        cocktail.tags.some((tag) => tag.tag === action.tag)
-      );
-    case DISLIKE_TAG:
-      return state.filter((cocktail) =>
-        cocktail.tags.every((tag) => tag.tag !== action.tag)
-      );
-    case IGNORE_TAG:
-      return state;
     default:
       return state;
   }
