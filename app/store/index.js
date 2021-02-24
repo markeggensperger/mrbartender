@@ -6,11 +6,17 @@ import thunkMiddleware from 'redux-thunk';
 import cocktailReducer from './cocktails';
 import tagReducer from './tags';
 import selectionReducer from './selections';
+import singleCocktailReducer from './singleCocktail';
+import singleTagReducer from './singleTag';
+import allTagsReducer from './allTags';
 
 const appReducer = combineReducers({
   cocktails: cocktailReducer,
   tags: tagReducer,
   selections: selectionReducer,
+  singleCocktail: singleCocktailReducer,
+  singleTag: singleTagReducer,
+  allTags: allTagsReducer,
 });
 
 const middleware = [

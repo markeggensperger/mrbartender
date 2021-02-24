@@ -466,7 +466,7 @@ module.exports = [
   },
   {
     name: `Brooklyn`,
-    directions: `2 oz. Rye Whiskey, 1 oz. Dry Vermouth, ½ oz. Maraschino, ½ oz. Amer Picon`,
+    directions: `2 oz. Rye Whiskey, 3/4 oz. Dry Vermouth, ½ oz. Maraschino, ½ oz. Amer Picon`,
     tagIds: [1, 7, 13, 14, 21],
   },
   {

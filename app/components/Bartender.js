@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { getCocktails, updateCocktails } from '../store/cocktails';
 import { select } from '../store/selections';
 import { updateTags } from '../store/tags';
+import { Link } from 'react-router-dom';
 
 class Bartender extends React.Component {
   constructor(props) {
@@ -11,8 +12,13 @@ class Bartender extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.toggleResults = this.toggleResults.bind(this);
   }
-  componentDidMount() {
-    this.props.getCocktails();
+  async componentDidMount() {
+    try {
+      await this.props.updateCocktails();
+      await this.props.updateTags();
+    } catch (err) {
+      console.error(err);
+    }
   }
   async handleClick(evt) {
     try {
@@ -30,7 +36,8 @@ class Bartender extends React.Component {
   }
   render() {
     const tag = this.props.tags[0] || { tag: 'Still Loading' };
-    const tags = this.props.tags || Array(6);
+    const cocktails = this.props.cocktails || Array(6);
+    console.log('cocktail count: ', cocktails.length);
     return (
       <div>
         <h3>
@@ -66,7 +73,7 @@ class Bartender extends React.Component {
           Dont care
         </button>
         <br />
-        {tags.length < 5 ? (
+        {cocktails.length < 5 ? (
           <button type='button' onClick={this.toggleResults}>
             Show me my cocktails
           </button>
@@ -75,8 +82,10 @@ class Bartender extends React.Component {
         )}
         <ul>
           {this.state.showResults
-            ? this.props.cocktails.map((cocktail) => (
-                <li key={cocktail.id}>{cocktail.name}</li>
+            ? cocktails.map((cocktail) => (
+                <li key={cocktail.id}>
+                  <Link to={`/cocktails/${cocktail.id}`}>{cocktail.name}</Link>
+                </li>
               ))
             : ''}
         </ul>
@@ -94,7 +103,6 @@ const mapState = (state) => ({
 const mapDispatch = (dispatch) => ({
   makeSelection: (tag, preference) => dispatch(select(tag, preference)),
   updateTags: () => dispatch(updateTags()),
-  getCocktails: () => dispatch(getCocktails()),
   updateCocktails: () => dispatch(updateCocktails()),
 });
 

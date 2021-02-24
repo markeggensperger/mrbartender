@@ -5,22 +5,9 @@ const { QueryTypes } = require('sequelize');
 
 router.get('/', async (req, res, next) => {
   try {
-    const cocktailIds = (await Cocktail.findAll()).map(
-      (cocktail) => cocktail.id
-    );
-    const count = cocktailIds.length;
-    const tags = await db.query(
-      `select tags.id, tags.tag, abs(${count / 2}-count(*)) as score
-        from tags
-        join cocktail_tags on cocktail_tags."tagId" = tags.id
-        group by tags.id, tags.tag
-        order by score`,
-      {
-        plain: false,
-        raw: false,
-        type: QueryTypes.SELECT,
-      }
-    );
+    const tags = await Tag.findAll({
+      order: [['tag', 'ASC']],
+    });
     res.json(tags);
   } catch (err) {
     next(err);
@@ -29,11 +16,13 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const cocktailIds =
-      req.body.cocktailIds ||
-      (await Cocktail.findAll()).map((cocktail) => cocktail.id);
+    let cocktailIds = req.body.cocktailIds || [];
+    if (cocktailIds.length === 0) {
+      cocktailIds = (await Cocktail.findAll()).map((cocktail) => cocktail.id);
+    }
     const count = cocktailIds.length;
-    const queriedIds = req.body.queriedIds || [0];
+    let queriedIds = req.body.queriedIds || [];
+    queriedIds.push(0);
     const tags = await db.query(
       `select tags.id, tags.tag, abs(${count / 2}-count(*)) as score
         from tags

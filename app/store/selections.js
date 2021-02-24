@@ -1,6 +1,9 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable no-shadow */
 import axios from 'axios';
 
 const SELECT = 'SELECT';
+const REMOVE_SELECTION = 'REMOVE_SELECTION';
 
 export const select = (tag, preference) => ({
   type: SELECT,
@@ -8,18 +11,30 @@ export const select = (tag, preference) => ({
   preference,
 });
 
-export default (
-  state = { likes: [], dislikes: [], ignores: [], all: [] },
-  action
-) => {
+export const removeSelection = (tag) => ({
+  type: REMOVE_SELECTION,
+  tag,
+});
+
+const initialState = { likes: [], dislikes: [], ignores: [], all: [] };
+
+export default (state = initialState, action) => {
+  const nextState = { likes: [], dislikes: [], ignores: [], all: [] };
   switch (action.type) {
     case SELECT:
       const { tag, preference } = action;
-      return {
-        ...state,
-        [preference]: [...state[preference], tag],
-        all: [...state.all, { ...tag, preference }],
-      };
+      nextState.all = [
+        ...state.all.filter((thisTag) => thisTag.id !== tag.id),
+        { ...tag, preference },
+      ];
+      nextState.all.forEach((tag) => nextState[tag.preference].push(tag.id));
+      return nextState;
+    case REMOVE_SELECTION:
+      nextState.all = state.all.filter(
+        (thisTag) => thisTag.id !== action.tag.id
+      );
+      nextState.all.forEach((tag) => nextState[tag.preference].push(tag.id));
+      return nextState;
     default:
       return state;
   }

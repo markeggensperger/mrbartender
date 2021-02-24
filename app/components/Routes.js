@@ -7,28 +7,45 @@ import {
   Switch,
 } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getTags } from '../store/tags';
+import { updateTags } from '../store/tags';
+import { updateCocktails } from '../store/cocktails';
+import { getAllTags } from '../store/allTags';
 import Sidebar from './SideBar';
 import AllTags from './AllTags';
 import Bartender from './Bartender';
+import Cocktail from './Cocktail';
+import Tag from './Tag';
 
 class Routes extends React.Component {
   constructor(props) {
     super(props);
   }
-  componentDidMount() {
-    this.props.getTags();
+  async componentDidMount() {
+    try {
+      await Promise.all([
+        this.props.getTags(),
+        this.props.getCocktails(),
+        this.props.getAllTags(),
+      ]);
+    } catch (err) {
+      console.error(err);
+    }
   }
   render() {
     return (
       <Router>
         <div id='main' className='container'>
-          <Sidebar />
+          <Route component={Sidebar} />
           <div>
             {/* <Navbar /> */}
             <Switch>
-              <Route path='/' component={Bartender} />
-              <Route path='/tags' component={AllTags} />
+              <Route exact path='/' component={Bartender} />
+              <Route exact path='/tags' component={AllTags} />
+              <Route
+                path='/cocktails/:id'
+                render={(props) => <Cocktail {...props} />}
+              />
+              <Route path='/tags/:id' render={(props) => <Tag {...props} />} />
             </Switch>
           </div>
         </div>
@@ -39,7 +56,9 @@ class Routes extends React.Component {
 
 const mapDispatch = (dispatch) => {
   return {
-    getTags: () => dispatch(getTags()),
+    getTags: () => dispatch(updateTags()),
+    getCocktails: () => dispatch(updateCocktails()),
+    getAllTags: () => dispatch(getAllTags()),
   };
 };
 

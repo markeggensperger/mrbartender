@@ -21,9 +21,7 @@ export const getCocktails = () => {
 export const updateCocktails = () => {
   return async (dispatch) => {
     try {
-      const { selections } = store.getState();
-      const likes = selections.likes.map((tag) => tag.id);
-      const dislikes = selections.dislikes.map((tag) => tag.id);
+      const { likes, dislikes } = store.getState().selections;
       const { data } = await axios.post('/api/cocktails/', { likes, dislikes });
       dispatch(setCocktails(data));
     } catch (err) {
