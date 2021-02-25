@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
+import { getCocktail } from '../store/singleCocktail';
 import { getTag } from '../store/singleTag';
 
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     this.selectTag = this.selectTag.bind(this);
+    this.toggleResults = this.toggleResults.bind(this);
   }
   async selectTag(evt) {
     try {
@@ -17,15 +19,25 @@ class Sidebar extends React.Component {
       console.error(err);
     }
   }
+  async toggleResults() {
+    try {
+      const { cocktails } = this.props;
+      const count = cocktails.length;
+      const id = cocktails[Math.floor(Math.random() * count)].id;
+      await this.props.getCocktail(id);
+      this.props.history.push('/cocktails/' + id);
+    } catch (err) {
+      console.error(err);
+    }
+  }
   render() {
     const count = this.props.cocktails.length || 0;
     const selectionList = this.props.selections.all || [];
     return (
       <div id='sidebar'>
         <div id='side_navigation'>
-          <h3>Home</h3>
           <h3>
-            <NavLink to='/'>Talk to the bartender</NavLink>
+            <NavLink to='/'>Talk to the bartenders</NavLink>
           </h3>
           <h3>
             <NavLink to='/tags'>All cocktail tags</NavLink>
@@ -41,6 +53,11 @@ class Sidebar extends React.Component {
             </h6>
           ))}
         </div>
+        {count < 5 && count > 0 ? (
+          <a onClick={this.toggleResults}>Enough! I'm Thirsty!!</a>
+        ) : (
+          ''
+        )}
       </div>
     );
   }
@@ -52,6 +69,7 @@ const mapState = (state) => ({
 });
 const mapDispatch = (dispatch) => ({
   getTag: (id) => dispatch(getTag(id)),
+  getCocktail: (id) => dispatch(getCocktail(id)),
 });
 
 export default connect(mapState, mapDispatch)(Sidebar);

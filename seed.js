@@ -6,24 +6,16 @@ const seedCocktailTags = require('./seedCocktailTags');
 
 const seed = async () => {
   try {
-    console.log('attempting sync');
     await db.sync({ force: true });
-    console.log('attempting create tags');
     await Tag.bulkCreate(seedTags);
-    console.log('tags created');
-    console.log('attempting create cocktails');
     await Cocktail.bulkCreate(seedCocktails);
-    console.log('concktails completed');
     await CocktailTag.bulkCreate(seedCocktailTags);
-    console.log('cocktail tags created');
     const testCocktail = await Cocktail.findOne({
       where: { name: seedCocktails[1].name },
       include: Tag,
     });
-    console.log('test cocktail: ', testCocktail);
-    console.log('test cocktail tags: ', testCocktail.tags);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 

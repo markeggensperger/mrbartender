@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getCocktails, updateCocktails } from '../store/cocktails';
 import { select } from '../store/selections';
 import { updateTags } from '../store/tags';
-import { Link } from 'react-router-dom';
+import BartenderAnimation from './bartenderAnimation';
 
 class Bartender extends React.Component {
   constructor(props) {
@@ -45,7 +45,7 @@ class Bartender extends React.Component {
           narrowing it down....
         </h3>
         <br />
-        <h3>How do you feel about this: {tag.tag}?</h3>
+        <div className='thought'>How do you feel about this: {tag.tag}?</div>
         <button
           type='button'
           name='likes'
@@ -73,22 +73,6 @@ class Bartender extends React.Component {
           Dont care
         </button>
         <br />
-        {cocktails.length < 5 ? (
-          <button type='button' onClick={this.toggleResults}>
-            Show me my cocktails
-          </button>
-        ) : (
-          ''
-        )}
-        <ul>
-          {this.state.showResults
-            ? cocktails.map((cocktail) => (
-                <li key={cocktail.id}>
-                  <Link to={`/cocktails/${cocktail.id}`}>{cocktail.name}</Link>
-                </li>
-              ))
-            : ''}
-        </ul>
       </div>
     );
   }

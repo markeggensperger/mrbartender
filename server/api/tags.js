@@ -5,9 +5,19 @@ const { QueryTypes } = require('sequelize');
 
 router.get('/', async (req, res, next) => {
   try {
-    const tags = await Tag.findAll({
-      order: [['tag', 'ASC']],
-    });
+    const tags = await db.query(
+      `
+      select tags.id, tags.tag, count(*) as count
+      from tags
+      join cocktail_tags on cocktail_tags."tagId" = tags.id
+      group by tags.id, tags.tag
+      order by tags.tag`,
+      {
+        plain: false,
+        raw: false,
+        type: QueryTypes.SELECT,
+      }
+    );
     res.json(tags);
   } catch (err) {
     next(err);

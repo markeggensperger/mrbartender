@@ -25,11 +25,11 @@ class AllTags extends React.Component {
   render() {
     const tags = this.props.tags || [];
     return (
-      <div>
+      <div id='allTags'>
         {tags.map((tag) => (
           <div className='tag_header' key={tag.id}>
             <div>
-              <h4 className='tag_name'>{tag.tag}</h4>
+              <p className='tag_name'>{tag.tag}</p>
             </div>
             <div
               className={

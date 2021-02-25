@@ -25,7 +25,7 @@ export const getAllTags = () => {
 export default (state = [], action) => {
   switch (action.type) {
     case SET_ALL_TAGS:
-      return action.tags;
+      return action.tags.map((tag) => ({ ...tag, value: parseInt(tag.value) }));
     case SELECT:
       return state.map((tag) => {
         if (tag.id === action.tag.id) {

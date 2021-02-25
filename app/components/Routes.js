@@ -15,6 +15,7 @@ import AllTags from './AllTags';
 import Bartender from './Bartender';
 import Cocktail from './Cocktail';
 import Tag from './Tag';
+import BartenderAnimation from './bartenderAnimation';
 
 class Routes extends React.Component {
   constructor(props) {
@@ -34,19 +35,18 @@ class Routes extends React.Component {
   render() {
     return (
       <Router>
-        <div id='main' className='container'>
+        <div className='container'>
           <Route component={Sidebar} />
-          <div>
+          <div className='route'>
             {/* <Navbar /> */}
-            <Switch>
-              <Route exact path='/' component={Bartender} />
-              <Route exact path='/tags' component={AllTags} />
-              <Route
-                path='/cocktails/:id'
-                render={(props) => <Cocktail {...props} />}
-              />
-              <Route path='/tags/:id' render={(props) => <Tag {...props} />} />
-            </Switch>
+            <Route exact path='/' component={Bartender} />
+            <Route exact path='/' component={BartenderAnimation} />
+            <Route exact path='/tags' component={AllTags} />
+            <Route
+              path='/cocktails/:id'
+              render={(props) => <Cocktail {...props} />}
+            />
+            <Route path='/tags/:id' render={(props) => <Tag {...props} />} />
           </div>
         </div>
       </Router>
