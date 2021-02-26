@@ -16,6 +16,9 @@ import Bartender from './Bartender';
 import Cocktail from './Cocktail';
 import Tag from './Tag';
 import BartenderAnimation from './bartenderAnimation';
+import Dislike from './dislike';
+import TopBar from './TopBar';
+import RocksGlass from './rocksGlass';
 
 class Routes extends React.Component {
   constructor(props) {
@@ -36,16 +39,18 @@ class Routes extends React.Component {
     return (
       <Router>
         <div className='container'>
-          <Route component={Sidebar} />
+          <Route component={TopBar} />
           <div className='route'>
             {/* <Navbar /> */}
             <Route exact path='/' component={Bartender} />
             <Route exact path='/' component={BartenderAnimation} />
             <Route exact path='/tags' component={AllTags} />
+            <Route exact path='/tags' component={RocksGlass} />
             <Route
               path='/cocktails/:id'
               render={(props) => <Cocktail {...props} />}
             />
+            <Route path='/dislike' component={Dislike} />
             <Route path='/tags/:id' render={(props) => <Tag {...props} />} />
           </div>
         </div>

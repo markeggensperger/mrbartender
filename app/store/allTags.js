@@ -5,6 +5,7 @@ import store from './index';
 const SET_ALL_TAGS = 'SET_ALL_TAGS';
 const SELECT = 'SELECT';
 const REMOVE_SELECTION = 'REMOVE_SELECTION';
+const RESET = 'RESET';
 
 const setAllTags = (tags) => ({
   type: SET_ALL_TAGS,
@@ -42,6 +43,8 @@ export default (state = [], action) => {
           return tag;
         }
       });
+    case RESET:
+      return state.map((tag) => ({ ...tag, preference: '' }));
     default:
       return state;
   }

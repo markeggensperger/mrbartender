@@ -5,4 +5,7 @@ module.exports = db.define('tags', {
   tag: {
     type: Sequelize.STRING,
   },
+  type: {
+    type: Sequelize.STRING,
+  },
 });

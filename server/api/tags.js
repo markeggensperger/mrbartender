@@ -7,7 +7,7 @@ router.get('/', async (req, res, next) => {
   try {
     const tags = await db.query(
       `
-      select tags.id, tags.tag, count(*) as count
+      select tags.id, tags.tag, tags.type, count(*) as count
       from tags
       join cocktail_tags on cocktail_tags."tagId" = tags.id
       group by tags.id, tags.tag
@@ -34,7 +34,7 @@ router.post('/', async (req, res, next) => {
     let queriedIds = req.body.queriedIds || [];
     queriedIds.push(0);
     const tags = await db.query(
-      `select tags.id, tags.tag, abs(${count / 2}-count(*)) as score
+      `select tags.id, tags.tag, tags.type, abs(${count / 2}-count(*)) as score
         from tags
         join cocktail_tags on cocktail_tags."tagId" = tags.id
         where cocktail_tags."cocktailId" in (${cocktailIds})

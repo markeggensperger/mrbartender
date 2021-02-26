@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const SELECT = 'SELECT';
 const REMOVE_SELECTION = 'REMOVE_SELECTION';
+const RESET = 'RESET';
 
 export const select = (tag, preference) => ({
   type: SELECT,
@@ -14,6 +15,10 @@ export const select = (tag, preference) => ({
 export const removeSelection = (tag) => ({
   type: REMOVE_SELECTION,
   tag,
+});
+
+export const reset = () => ({
+  type: RESET,
 });
 
 const initialState = { likes: [], dislikes: [], ignores: [], all: [] };
@@ -35,6 +40,8 @@ export default (state = initialState, action) => {
       );
       nextState.all.forEach((tag) => nextState[tag.preference].push(tag.id));
       return nextState;
+    case RESET:
+      return initialState;
     default:
       return state;
   }
