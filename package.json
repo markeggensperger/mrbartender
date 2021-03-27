@@ -1,14 +1,17 @@
 {
-  "name": "MrBartender",
+  "name": "askthepros",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start-dev": "npm run build-watch & npm run start-server",
     "start-server": "nodemon main.js -e html,js,css --ignore public",
+    "build": "webpack",
     "build-watch": "webpack -w",
     "start": "echo 'Running server for production - developers, use npm run start-dev for development' && node main",
-    "seed": "node seed.js"
+    "seed": "node seed.js",
+    "deploy": "script/deploy",
+    "heroku-token": "script/encrypt-heroku-auth-token.js"
   },
   "keywords": [],
   "author": "",
