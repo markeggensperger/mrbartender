@@ -25,14 +25,12 @@ class Cocktail extends React.Component {
       tags = this.props.cocktail.tags;
     }
     return (
-      <div>
+      <div className='cocktailData'>
         <h1>{name}</h1>
         <h3>Ingredients:</h3>
-        <ul>
-          {directions.map((ingredient, idx) => (
-            <li key={idx}>{ingredient}</li>
-          ))}
-        </ul>
+        {directions.map((ingredient, idx) => (
+          <h5 key={idx}>{ingredient}</h5>
+        ))}
         <div className='tagBox'>
           {tags.map((tag) => (
             <div className='tag' key={tag.id}>

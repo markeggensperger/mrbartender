@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getTags } from '../store/allTags';
-import { select, removeSelection } from '../store/selections';
+import { select, removeSelection, reset } from '../store/selections';
 import { updateTags } from '../store/tags';
 import { updateCocktails } from '../store/cocktails';
 import { getCocktail } from '../store/singleCocktail';
@@ -11,6 +11,7 @@ class AllTags extends React.Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.toggleResults = this.toggleResults.bind(this);
+    this.reset = this.reset.bind(this);
   }
   async handleClick(tag) {
     try {
@@ -31,6 +32,16 @@ class AllTags extends React.Component {
       console.error(err);
     }
   }
+  async reset() {
+    try {
+      this.props.reset();
+      await this.props.updateCocktails();
+      await this.props.updateTags();
+      this.props.toggleMenu();
+    } catch (err) {
+      console.error(err);
+    }
+  }
   async toggleResults() {
     try {
       const { cocktails } = this.props;
@@ -45,6 +56,7 @@ class AllTags extends React.Component {
   render() {
     const tags = this.props.tags || [];
     const cocktails = this.props.cocktails || Array(6).fill(0);
+    console.log('# of cocktails: ', cocktails.length);
     return (
       <div id='allTags'>
         {tags.map((tag) => (
@@ -54,10 +66,19 @@ class AllTags extends React.Component {
             </p>
           </div>
         ))}
-        {cocktails.length < 6 && cocktails.length > 0 ? (
+        {cocktails.length < 5 && cocktails.length > 0 ? (
           <img
             src='/media/thirsty.svg'
             onClick={this.toggleResults}
+            id='results'
+          />
+        ) : (
+          ''
+        )}
+        {cocktails.length === 0 ? (
+          <img
+            src='/media/invalid combo.svg'
+            onClick={this.reset}
             id='results'
           />
         ) : (
@@ -79,5 +100,6 @@ const mapDispatch = (dispatch) => ({
   updateTags: () => dispatch(updateTags()),
   updateCocktails: () => dispatch(updateCocktails()),
   getCocktail: (id) => dispatch(getCocktail(id)),
+  reset: () => dispatch(reset()),
 });
 export default connect(mapState, mapDispatch)(AllTags);
