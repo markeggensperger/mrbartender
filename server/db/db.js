@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
+const pkg = require('../../package.json');
 
-const dbName = 'mrbartender';
+const dbName = 'askthepros';
 console.log(`Opening database connection to ${dbName}`);
 
 const databaseName =
